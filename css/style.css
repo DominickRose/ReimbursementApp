@@ -1,0 +1,31 @@
+.container {
+	display: grid; 
+	grid-template-columns: 0.3fr 1.7fr 1.7fr 0.3fr 1.7fr 0.3fr; 
+	grid-template-rows: 0.4fr 1.3fr 0.4fr 2.6fr 0.3fr; 
+	gap: 0px 0px; 
+	grid-template-areas: 
+	  ". . . . . ."
+	  ". welcome welcome . overview ."
+	  ". . . . . ."
+	  ". reimbursement-table reimbursement-table reimbursement-table reimbursement-table ."
+	  ". . . . . ."; 
+      }
+      
+.overview { 
+	grid-area: overview;
+	text-align: center;
+	font-size: 30pt;
+ }
+      
+.welcome { 
+	grid-area: welcome; 
+	font-size: 30pt;
+}
+      
+.reimbursement-table { grid-area: reimbursement-table; }
+
+.login-form {
+	text-align: center;
+	padding: 15% 0;
+}
+     

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" id='empDashboardHTML'>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../css/style.css">
+	<!-- CSS only -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<title>Manager Dashboard</title>
+</head>
+<body onload="getMgrData()">
+	<div class="container">
+		<div class="welcome">
+			<h1 id="welcomeMessage"> Welcome Back </h1>
+		</div>
+		<div class="overview"><h3>Total Approved</h3><p id="approvedAmount">$0</p></div>
+		<div class="reimbursement-table">
+			<table style="width: 100%;" class = "table" id = "reimbursementTable">
+				<thead><th>Date</th><th>Amount</th><th>Owner</th><th>Reason</th><th>Status</th><th>Reject/Approve</th></thead>
+			</table>
+		</div>
+        </div>
+</body>
+<script>
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const empId = urlSearchParams.get('id');
+
+	const welcomeMessage = document.getElementById('welcomeMessage');
+	const approvedAmount = document.getElementById('approvedAmount');
+	const reimbursementTable = document.getElementById('reimbursementTable');
+
+	async function getMgrData() {
+		const empResponse = await fetch("http://localhost:5000/users/" + empId)
+		const empBody = await empResponse.json()
+		welcomeMessage.innerHTML += empBody['firstName']
+
+		const response = await fetch("http://localhost:5000/reimbursements");
+		const body = await response.json();
+
+		body.forEach(addToTable);
+
+	}
+
+	function addToTable(reimbursement) {
+		reimbursementTable.innerHTML += `<tr><td>${reimbursement.date}</td><td>${reimbursement.amount}</td><td>${reimbursement.mgrMessage}</td><td>${reimbursement.reason}</td><td>${reimbursement.status}</td><td><button>Reject</button><button>Approve</button></td></tr>`
+	}
+
+</script>
+</html>

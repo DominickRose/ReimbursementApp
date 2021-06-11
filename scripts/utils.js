@@ -8,3 +8,14 @@ function calcSum(reimbursementArray, status) {
 	sum = interestedArray.reduce((sum, reimbursement) => sum + reimbursement.amount, 0)
 	return sum
 }
+
+async function fetchReimbursements(empId) {
+	let response;
+	if (empId === undefined) {
+		response = await fetch("http://localhost:5000/reimbursements");
+	}
+	else {
+		response = await fetch("http://localhost:5000/reimbursements?owner=" + empId);
+	}
+	return response.json();
+}

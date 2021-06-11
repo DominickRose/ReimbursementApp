@@ -5,23 +5,66 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="../css/style.css">
+
 	<!-- CSS only -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+	<script src="../scripts/utils.js"></script>
+
 	<title>Employee Dashboard</title>
-</head>
-<body onload="getEmpData()">
+
+</head> <body onload="initialize()">
 	<div class="container">
 		<div class="welcome">
 			<h1 id="welcomeMessage"> Welcome Back </h1>
 		</div>
 		<div class="overview"><h3>Total Approved</h3><p id="approvedAmount">$0</p></div>
 		<div class="reimbursement-table">
-			<table style="width: 100%;" class = "table" id = "reimbursementTable">
-				<thead><th>Date</th><th>Amount</th><th>Reason</th><th>Status</th><th>Comments</th><th>Delete</th></thead>
+			<label for="filterChoices">Filter: </label>
+			<select id="filterChoices" onchange="populateTable()">
+				<option value="All">All</option>
+				<option value="Approved">Approved</option>
+				<option value="Pending">Pending</option>
+				<option value="Rejected">Rejected</option>
+			</select>
+			<table style="width: 100%;" class = "table table-striped" >
+				<thead>
+					<th>Date</th>
+					<th>Amount</th>
+					<th>Reason</th>
+					<th>Status</th>
+					<th>Comments</th>
+					<th ><button id="newRequestBtn" type="button" data-toggle="modal" data-target="#reimbursementModal">New Request</button></th></thead>
+				<tbody id="reimbursementTable"></tbody>
 			</table>
 		</div>
         </div>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="reimbursementModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <h5 class="modal-title" id="exampleModalLabel">New Reimbursement Request</h5>
+	      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	      </button>
+	    </div>
+	    <div class="modal-body">
+	      ...
+	    </div>
+	    <div class="modal-footer">
+	      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	      <button type="button" class="btn btn-primary">Submit</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
 </body>
+
 <script>
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const empId = urlSearchParams.get('id');
@@ -29,22 +72,33 @@
 	const welcomeMessage = document.getElementById('welcomeMessage');
 	const approvedAmount = document.getElementById('approvedAmount');
 	const reimbursementTable = document.getElementById('reimbursementTable');
+	const filterChoices = document.getElementById("filterChoices");
 
-	async function getEmpData() {
+	let reimbursements;
+
+	async function initialize() {
 		const empResponse = await fetch("http://localhost:5000/users/" + empId)
 		const empBody = await empResponse.json()
 		welcomeMessage.innerHTML += empBody['firstName']
 
-		const response = await fetch("http://localhost:5000/reimbursements?owner=" + empId);
-		const body = await response.json();
+		reimbursements = await fetchReimbursements(empId);
+		populateTable();
+	}
 
-		body.forEach(addToTable);
+	async function populateTable() {
+		reimbursementTable.innerHTML = '';
+		if (filterChoices.value !== 'All') {
+			reimbursements.filter((reimbursement) => reimbursement.status == filterChoices.value).forEach(addToTable);
+		}
+		else {
+			reimbursements.forEach(addToTable);
+		}
 
+		approvedAmount.innerHTML = `$${calcSum(reimbursements, 'Approved')}`;
 	}
 
 	function addToTable(reimbursement) {
-		reimbursementTable.innerHTML += `<tr><td>${reimbursement.date}</td><td>${reimbursement.amount}</td><td>${reimbursement.reason}</td><td>${reimbursement.status}</td><td>${reimbursement.mgrMessage}</td><td><button>Delete</button></td></tr>`
+		reimbursementTable.innerHTML += `<tr><td>${reimbursement.date}</td><td>${reimbursement.amount}</td><td>${reimbursement.reason}</td><td class="statusValue">${reimbursement.status}</td><td>${reimbursement.mgrMessage}</td><td><button>Delete</button></td></tr>`
 	}
 
-</script>
-</html>
+</script></html>

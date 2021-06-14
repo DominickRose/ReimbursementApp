@@ -7,17 +7,38 @@
 	<link rel="stylesheet" href="../css/style.css">
 	<!-- CSS only -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+	<script src="../scripts/utils.js"></script>
+	
 	<title>Manager Dashboard</title>
 </head>
-<body onload="getMgrData()">
+<body onload="initialize()">
 	<div class="container">
 		<div class="welcome">
 			<h1 id="welcomeMessage"> Welcome Back </h1>
 		</div>
-		<div class="overview"><h3>Total Approved</h3><p id="approvedAmount">$0</p></div>
+		<div class="overview">
+			<h3>Total Requests</h4><p id="totalRequests">0</p>
+			<h3>Pending Requests</h4><p id="pendingRequests">0</p>
+				<a style="font-size: 18pt;" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">See All Stats</a>
+		</div>
 		<div class="reimbursement-table">
-			<table style="width: 100%;" class = "table" id = "reimbursementTable">
+			<label for="statusFilter">Filters:</label>
+			<select id = "statusFilter" onchange="populateTable()">
+				<option value="All">All</option>
+				<option value="Approved">Approved</option>
+				<option value="Pending">Pending</option>
+				<option value="Rejected">Rejected</option>
+			</select>
+			<select id= "employeeFilter" onchange="populateTable()">
+				<option value="All">All</option>
+			</select>
+			<table style="width: 100%;" class = "table table-striped" >
 				<thead><th>Date</th><th>Amount</th><th>Owner</th><th>Reason</th><th>Status</th><th>Reject/Approve</th></thead>
+				<tbody id = "reimbursementTable" ></tbody>
 			</table>
 		</div>
         </div>
@@ -27,23 +48,54 @@
 	const empId = urlSearchParams.get('id');
 
 	const welcomeMessage = document.getElementById('welcomeMessage');
-	const approvedAmount = document.getElementById('approvedAmount');
 	const reimbursementTable = document.getElementById('reimbursementTable');
+	const totalRequests = document.getElementById('totalRequests');
+	const pendingRequests = document.getElementById('pendingRequests');
 
-	async function getMgrData() {
-		const empResponse = await fetch("http://localhost:5000/users/" + empId)
-		const empBody = await empResponse.json()
-		welcomeMessage.innerHTML += empBody['firstName']
+	const statusFilter = document.getElementById("statusFilter");
+	const employeeFilter = document.getElementById('employeeFilter');
 
-		const response = await fetch("http://localhost:5000/reimbursements");
-		const body = await response.json();
+	let reimbursements;
+	let employees;
 
-		body.forEach(addToTable);
+	async function initialize() {
+		employees = await fetchEmployees();
+		welcomeMessage.innerHTML += employees[empId];
 
+		for(const employee in employees) {
+			employeeFilter.innerHTML += `<option value = ${employee}>${employees[employee]}</option>`
+		}
+
+		reimbursements = await fetchReimbursements();
+		populateTable();
+
+		pendingRequests.innerHTML = reimbursements.filter((reimbursement) => reimbursement.status == 'Pending').length
+		totalRequests.innerHTML = reimbursements.length
+	}
+
+	async function populateTable() {
+		reimbursementTable.innerHTML = "";
+		if (statusFilter.value === "All" && employeeFilter.value === "All") {
+			reimbursements.forEach(addToTable);
+		}
+
+		else if (statusFilter.value === "All") {
+			reimbursements.filter((reimbursement) => reimbursement.ownerId == employeeFilter.value).forEach(addToTable);
+		}
+
+		else if (employeeFilter.value === "All") {
+			reimbursements.filter((reimbursement) => reimbursement.status == statusFilter.value).forEach(addToTable);
+		}
+		else {
+			reimbursements.filter((reimbursement) => reimbursement.status == statusFilter.value && reimbursement.ownerId == employeeFilter.value).forEach(addToTable);
+		}
 	}
 
 	function addToTable(reimbursement) {
-		reimbursementTable.innerHTML += `<tr><td>${reimbursement.date}</td><td>${reimbursement.amount}</td><td>${reimbursement.mgrMessage}</td><td>${reimbursement.reason}</td><td>${reimbursement.status}</td><td><button>Reject</button><button>Approve</button></td></tr>`
+		const date = new Date();
+		date.setTime(reimbursement.date)
+
+		reimbursementTable.innerHTML += `<tr><td>${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}</td><td>$${reimbursement.amount}</td><td>${employees[reimbursement.ownerId]}</td><td>${reimbursement.reason}</td><td>${reimbursement.status}</td><td><button>Reject</button> <button>Approve</button></td></tr>`
 	}
 
 </script>

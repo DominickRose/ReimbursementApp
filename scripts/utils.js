@@ -19,3 +19,19 @@ async function fetchReimbursements(empId) {
 	}
 	return response.json();
 }
+
+async function fetchEmployees(empId) {
+	let response;
+	let empDict = {};
+	if (empId === undefined) {
+		response = await fetch("http://localhost:5000/users");
+		body = await response.json();
+		body.forEach((employee) => empDict[employee.userId] = `${employee.firstName} ${employee.lastName}`)
+		return empDict;
+	}
+
+	else {
+		response = await fetch("http://localhost:5000/users/" + empId);
+		return response.json();
+	}
+}

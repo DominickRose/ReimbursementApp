@@ -80,8 +80,7 @@
 	let reimbursements;
 
 	async function initialize() {
-		const empResponse = await fetch("http://localhost:5000/users/" + empId)
-		const empBody = await empResponse.json()
+		const empBody = await fetchEmployees(empId);
 		welcomeMessage.innerHTML += empBody['firstName']
 
 		reimbursements = await fetchReimbursements(empId);

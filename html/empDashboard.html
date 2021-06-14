@@ -83,7 +83,7 @@
 		const empBody = await fetchEmployees(empId);
 		welcomeMessage.innerHTML += empBody['firstName']
 
-		reimbursements = await fetchReimbursements(empId);
+		reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
 		populateTable();
 	}
 
@@ -99,11 +99,17 @@
 		approvedAmount.innerHTML = `$${calcSum(reimbursements, 'Approved')}`;
 	}
 
+	function createDelete(reimbursement) {
+		return reimbursement.status === 'Pending' ?
+			`<button class='btn-danger' id="delete_${reimbursement.reimbursementId}" onclick="deleteRequest(${reimbursement.reimbursementId})">Delete</button>` :
+			''
+	}
+
 	function addToTable(reimbursement) {
 		const date = new Date();
 		date.setTime(reimbursement.date)
 
-		reimbursementTable.innerHTML += `<tr><td>${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}</td><td>$${reimbursement.amount}</td><td>${reimbursement.reason}</td><td class="statusValue">${reimbursement.status}</td><td>${reimbursement.mgrMessage}</td><td><button class='btn-danger' id="delete_${reimbursement.reimbursementId}" onclick="deleteRequest(${reimbursement.reimbursementId})">Delete</button></td></tr>`
+		reimbursementTable.innerHTML += `<tr><td>${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}</td><td>$${reimbursement.amount}</td><td>${reimbursement.reason}</td><td class="statusValue">${reimbursement.status}</td><td>${reimbursement.mgrMessage}</td><td>${createDelete(reimbursement)}</td></tr>`
 	}
 
 	async function submitRequest() {
@@ -125,7 +131,7 @@
 
 		post_result = await fetch('http://localhost:5000/reimbursements', config);
 		if (post_result.status === 201) {
-			reimbursements = await fetchReimbursements()
+			reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
 			populateTable();
 		}
 	}
@@ -138,7 +144,7 @@
 		if (shouldContinue) {
 			const result = await fetch(`http://localhost:5000/reimbursements/${id}`, config);
 			if (result.status == 205) {
-				reimbursements = await fetchReimbursements();
+				reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
 				populateTable();
 			}
 		}

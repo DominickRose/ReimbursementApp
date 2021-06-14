@@ -23,16 +23,17 @@
 		<div class="overview">
 			<h3>Total Requests</h4><p id="totalRequests">0</p>
 			<h3>Pending Requests</h4><p id="pendingRequests">0</p>
-				<a style="font-size: 18pt;" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">See All Stats</a>
+				<a style="font-size: 18pt;" href="https://www.youtube.com/watch?v=NfSGm9DDQ3o">See All Stats</a>
 		</div>
 		<div class="reimbursement-table">
-			<label for="statusFilter">Filters:</label>
+			<label for="statusFilter">Status:</label>
 			<select id = "statusFilter" onchange="populateTable()">
 				<option value="All">All</option>
 				<option value="Approved">Approved</option>
 				<option value="Pending">Pending</option>
 				<option value="Rejected">Rejected</option>
 			</select>
+			<label for="employeeFilter">Employee:</label>
 			<select id= "employeeFilter" onchange="populateTable()">
 				<option value="All">All</option>
 			</select>
@@ -42,6 +43,27 @@
 			</table>
 		</div>
         </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="approveRequestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <h5 class="modal-title" id="exampleModalLabel">Approve Reimbursement Request</h5>
+	      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	      </button>
+	    </div>
+	    <div class="modal-body">
+		    <textarea rows="6" style="width:100%;"id="approvalCommentInput" maxlength="200" placeholder="Comments...(200 char max)"></textarea>
+	    </div>
+	    <div class="modal-footer">
+	      <button type="button" class="btn btn-secondary" data-dismiss="modal" id='cancelApproveBtn' onclick="approvalCommentInput.value = '';">Cancel</button>
+	      <button type="button" class="btn btn-primary" data-dismiss="modal"  id='submitApproveBtn' onclick="submitChange('Approved')">Submit</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
 </body>
 <script>
 	const urlSearchParams = new URLSearchParams(window.location.search);
@@ -55,8 +77,11 @@
 	const statusFilter = document.getElementById("statusFilter");
 	const employeeFilter = document.getElementById('employeeFilter');
 
+	const approvalCommentInput = document.getElementById('approvalCommentInput');
+
 	let reimbursements;
 	let employees;
+	let activeReimbursement = 0;
 
 	async function initialize() {
 		employees = await fetchEmployees();
@@ -66,11 +91,9 @@
 			employeeFilter.innerHTML += `<option value = ${employee}>${employees[employee]}</option>`
 		}
 
-		reimbursements = await fetchReimbursements();
+		reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
 		populateTable();
 
-		pendingRequests.innerHTML = reimbursements.filter((reimbursement) => reimbursement.status == 'Pending').length
-		totalRequests.innerHTML = reimbursements.length
 	}
 
 	async function populateTable() {
@@ -89,13 +112,44 @@
 		else {
 			reimbursements.filter((reimbursement) => reimbursement.status == statusFilter.value && reimbursement.ownerId == employeeFilter.value).forEach(addToTable);
 		}
+	
+		pendingRequests.innerHTML = reimbursements.filter((reimbursement) => reimbursement.status == 'Pending').length
+		totalRequests.innerHTML = reimbursements.length
 	}
 
 	function addToTable(reimbursement) {
 		const date = new Date();
 		date.setTime(reimbursement.date)
 
-		reimbursementTable.innerHTML += `<tr><td>${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}</td><td>$${reimbursement.amount}</td><td>${employees[reimbursement.ownerId]}</td><td>${reimbursement.reason}</td><td>${reimbursement.status}</td><td><button>Reject</button> <button>Approve</button></td></tr>`
+		reimbursementTable.innerHTML += `<tr><td>${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}</td><td>$${reimbursement.amount}</td><td>${employees[reimbursement.ownerId]}</td><td>${reimbursement.reason}</td><td class="reimbursement-status">${reimbursement.status}</td><td>${createButtons(reimbursement)}</td></tr>`
+	}
+
+	function createButtons(reimbursement) {
+		return reimbursement.status === 'Pending' ? 
+			`<button>Reject</button> <button class = 'approve-btn btn-primary' data-toggle="modal" data-target=#approveRequestModal onclick='activeReimbursement = ${reimbursement.reimbursementId}'>Approve</button>` : 
+			''
+	}
+
+	async function submitChange(action) {
+		const body = {
+			mgrMessage: approvalCommentInput.value,
+			status: action
+		};
+
+		approvalCommentInput.value = '';
+
+		const config = {
+			method: "PATCH",
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify(body)
+		};
+
+		response = await fetch(`http://localhost:5000/reimbursements/${activeReimbursement}/approve_or_deny`, config)
+
+		if (response.status == 200) {
+			reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
+			populateTable();
+		}
 	}
 
 </script>

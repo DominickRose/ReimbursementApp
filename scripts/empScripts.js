@@ -47,12 +47,14 @@ async function submitRequest() {
 	const body = {
 		reimbursementId: 0,
 		ownerId: empId,
-		amount: amountInput.value,
+		amount: parseInt(amountInput.value),
 		reason: reasonInput.value,
 		status: 'Pending',
 		mgrMessage: '',
 		date: new Date().getTime()
 	}
+
+	console.log(body);
 
 	const config = {
 		method: "POST",

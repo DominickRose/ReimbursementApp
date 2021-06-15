@@ -1,0 +1,25 @@
+.container {
+	display: grid;
+	grid-template-columns: 0.3fr 1.7fr 1.7fr 0.3fr;
+	grid-template-rows: 0.3fr 2.1fr 0.3fr;
+	gap: 0px 0px;
+	grid-auto-flow: row;
+	grid-template-areas:
+	  ". . . ."
+	  ". pie bar ."
+	  ". . back .";
+      }
+      
+.pie { grid-area: pie; 
+	height: 360px;
+}
+      
+.bar { grid-area: bar; 
+	height: 360px;	
+}
+
+.back {
+	grid-area: back;
+	padding-top: 20px;
+	text-align: right;
+}

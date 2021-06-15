@@ -1,6 +1,3 @@
-const urlSearchParams = new URLSearchParams(window.location.search);
-const empId = urlSearchParams.get('id');
-
 const welcomeMessage = document.getElementById('welcomeMessage');
 const reimbursementTable = document.getElementById('reimbursementTable');
 const totalRequests = document.getElementById('totalRequests');
@@ -18,7 +15,6 @@ let activeReimbursement = 0;
 
 async function initialize() {
 	employees = await fetchEmployees();
-	welcomeMessage.innerHTML += employees[empId];
 
 	for(const employee in employees) {
 		employeeFilter.innerHTML += `<option value = ${employee}>${employees[employee]}</option>`

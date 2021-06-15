@@ -10,6 +10,7 @@ const statusFilter = document.getElementById("statusFilter");
 const employeeFilter = document.getElementById('employeeFilter');
 
 const approvalCommentInput = document.getElementById('approvalCommentInput');
+const rejectionCommnetInput = document.getElementById('rejectionCommentInput')
 
 let reimbursements;
 let employees;
@@ -58,17 +59,19 @@ function addToTable(reimbursement) {
 
 function createButtons(reimbursement) {
 	return reimbursement.status === 'Pending' ? 
-		`<button>Reject</button> <button class = 'approve-btn btn-primary' data-toggle="modal" data-target=#approveRequestModal onclick='activeReimbursement = ${reimbursement.reimbursementId}'>Approve</button>` : 
+		`<button class='reject-btn btn-danger' data-toggle="modal" data-target=#rejectRequestModal onclick='activeReimbursement = ${reimbursement.reimbursementId}'>Reject</button> <button class = 'approve-btn btn-primary' data-toggle="modal" data-target=#approveRequestModal onclick='activeReimbursement = ${reimbursement.reimbursementId}'>Approve</button>` : 
 		''
 }
 
 async function submitChange(action) {
+	message = action == "Approved" ? approvalCommentInput.value : rejectionCommnetInput.value;
 	const body = {
-		mgrMessage: approvalCommentInput.value,
+		mgrMessage: message,
 		status: action
 	};
 
 	approvalCommentInput.value = '';
+	rejectionCommnetInput.value = '';
 
 	const config = {
 		method: "PATCH",

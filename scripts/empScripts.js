@@ -10,11 +10,11 @@ const reasonInput = document.getElementById('descriptionInput');
 
 let reimbursements;
 
-async function initialize() {
+async function empInitialize() {
 	const empBody = await fetchEmployees(empId);
 	welcomeMessage.innerHTML += empBody['firstName']
 
-	reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
+	reimbursements = (await fetchReimbursements(empId)).sort((first, second) => first.date - second.date);
 	populateTable();
 }
 
@@ -64,7 +64,7 @@ async function submitRequest() {
 
 	post_result = await fetch('http://localhost:5000/reimbursements', config);
 	if (post_result.status === 201) {
-		reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
+		reimbursements = (await fetchReimbursements(empId)).sort((first, second) => first.date - second.date);
 		populateTable();
 	}
 }
@@ -77,7 +77,7 @@ async function deleteRequest(id) {
 	if (shouldContinue) {
 		const result = await fetch(`http://localhost:5000/reimbursements/${id}`, config);
 		if (result.status == 205) {
-			reimbursements = (await fetchReimbursements()).sort((first, second) => first.date - second.date);
+			reimbursements = (await fetchReimbursements(empId)).sort((first, second) => first.date - second.date);
 			populateTable();
 		}
 	}

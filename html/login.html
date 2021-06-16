@@ -54,12 +54,12 @@
 		const root = "C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/";
 		let url = root;
 		if (type === "emp") {
-			url += "empDashboard.html";
+			url += `empDashboard.html?id=${id}`;
 		}
 		else {
 			url += "mgrDashboard.html";
 		}
-		window.location.href = url + '?id=' + id;
+		window.location.href = url;
 	}
 </script>
 </html>

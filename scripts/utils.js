@@ -26,7 +26,7 @@ async function fetchEmployees(empId) {
 	if (empId === undefined) {
 		response = await fetch("http://localhost:5000/users");
 		body = await response.json();
-		body.forEach((employee) => empDict[employee.userId] = `${employee.firstName} ${employee.lastName}`)
+		body.filter((employee) => employee.empOrMgr == 'emp').forEach((employee) => empDict[employee.userId] = `${employee.firstName} ${employee.lastName}`)
 		return empDict;
 	}
 

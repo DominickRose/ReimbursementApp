@@ -11,11 +11,11 @@
       }
       
 .pie { grid-area: pie; 
-	height: 360px;
+	height: 75vh;
 }
       
 .bar { grid-area: bar; 
-	height: 360px;	
+	height: 75vh;
 }
 
 .back {

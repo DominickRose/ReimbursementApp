@@ -17,6 +17,12 @@
 	<title>Manager Dashboard</title>
 </head>
 <body onload="initialize()">
+	<div class='topnav'>
+		<a class="active" href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/mgrDashboard.html">Home</a>
+		<a href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/mgrStatistics.html">Stats</a>
+		<a class="right" href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/login.html">Logout</a>
+	</div>
+
 	<div class="container">
 		<div class="welcome">
 			<h1 id="welcomeMessage"> Welcome Back Manager</h1>
@@ -27,23 +33,24 @@
 				<a style="font-size: 18pt;" href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/mgrStatistics.html">See All Stats</a>
 		</div>
         </div><br>
-		<div class="reimbursement-table">
-			<label for="statusFilter">Status:</label>
-			<select id = "statusFilter" onchange="populateTable()">
-				<option value="All">All</option>
-				<option value="Approved">Approved</option>
-				<option value="Pending">Pending</option>
-				<option value="Rejected">Rejected</option>
-			</select>
-			<label for="employeeFilter">Employee:</label>
-			<select id= "employeeFilter" onchange="populateTable()">
-				<option value="All">All</option>
-			</select>
-			<table style="width: 100%;" class = "table table-striped" >
-				<thead><th>Date</th><th>Amount</th><th>Owner</th><th>Reason</th><th>Status</th><th>Reject/Approve</th></thead>
-				<tbody id = "reimbursementTable" ></tbody>
-			</table>
-		</div>
+
+	<div class="reimbursement-table">
+		<label for="employeeFilter">Employee:</label>
+		<select id= "employeeFilter" onchange="populateTable()">
+			<option value="All">All</option>
+		</select>			
+		<label for="statusFilter">Status:</label>
+		<select id = "statusFilter" onchange="populateTable()">
+			<option value="All">All</option>
+			<option value="Approved">Approved</option>
+			<option value="Pending">Pending</option>
+			<option value="Rejected">Rejected</option>
+		</select>
+		<table style="width: 100%;" class = "table table-striped" >
+			<thead><th>Date</th><th>Amount</th><th>Owner</th><th>Reason</th><th>Status</th><th>Reject/Approve</th></thead>
+			<tbody id = "reimbursementTable" ></tbody>
+		</table>
+	</div>
 
       <!-- Modal -->
       <div class="modal fade" id="approveRequestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

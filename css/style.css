@@ -1,5 +1,26 @@
 body {
 	background-color: lightgray;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+body.login {
+	background: url("../static/background.jpg") no-repeat center center fixed;
+	background-size: cover;
+	height: 100%;
+	overflow: hidden;
+}
+
+body.dashboard {
+	background: url("../static/dash_background.jpg") no-repeat center center fixed;
+	background-size: cover;
+	height: 100%;
+}
+
+body.why {
+	background: url("../static/sbackgroun.jpg") no-repeat center center fixed;
+	background-size: cover;
+	height: 100%;
+	overflow: hidden;
 }
 
 .reimbursement-table {
@@ -11,9 +32,26 @@ body {
 	padding-top: 5pt;
 }
 
+/* .login-form {
+	position: fixed;
+	padding: 15% 0 0 0;
+	background-color: white;
+} */
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2.5%;
+}
+
 .login-form {
+	margin: auto;
 	text-align: center;
-	padding: 15% 0;
+	width: 25%;
+	padding: 10px;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 15pt;
 }
 
 .topnav {

@@ -1,8 +1,14 @@
+body {
+	background-color: lightgray;
+}
+
 .reimbursement-table {
 	width: 75%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 10%;
+	background-color: white;
+	padding-top: 5pt;
 }
 
 .login-form {

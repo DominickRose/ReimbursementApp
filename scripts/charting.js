@@ -35,6 +35,7 @@ async function initializeCharts() {
 	toolbar_visible: false, 
 	defaultPoint_label_visible: true,
 	defaultPoint_label_text: '<b>$%value</b>', 
+	title_position: 'center', 
 	title_label_text: 'Request Amounts by Category', 
 	legend_visible: false, 
 	yAxis_visible: false, 

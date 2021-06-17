@@ -5,9 +5,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="../css/dashboardLayout.css">
-	<link rel="stylesheet" href="../css/style.css">
 	<!-- CSS only -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<link rel="stylesheet" href="../css/style.css">
 	
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
@@ -19,7 +19,7 @@
 <body onload="initialize()">
 	<div class='topnav'>
 		<a class="active" href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/mgrDashboard.html">Home</a>
-		<a href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/mgrStatistics.html">Stats</a>
+		<a id='statNav' href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/mgrStatistics.html">Stats</a>
 		<a class="right" href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/login.html">Logout</a>
 	</div>
 
@@ -30,7 +30,6 @@
 		<div class="stat">
 			<h3>Total Requests</h4><p id="totalRequests">0</p>
 			<h3>Pending Requests</h4><p id="pendingRequests">0</p>
-				<a style="font-size: 18pt;" href="C:/Users/Dominick/VSCodeProjects/ReimbursementApp/html/mgrStatistics.html">See All Stats</a>
 		</div>
         </div><br>
 

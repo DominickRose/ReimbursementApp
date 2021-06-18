@@ -12,17 +12,18 @@ body.login {
 
 body.dashboard {
 	background-color: black;
-	background: url("../static/logo.png") no-repeat center center fixed;
-	/* background: url("../static/dash_background.jpg") no-repeat center center fixed;  */
+	/* background: url("../static/logo.png") no-repeat center center fixed; */
+	background: url("../static/dash_background.jpg") no-repeat center center fixed; 
 	background-size: cover;
 	height: 100%;
 }
 
-body.why {
+body.stat {
 	background: url("../static/sbackgroun.jpg") no-repeat center center fixed;
 	background-size: cover;
 	height: 100%;
 	overflow: hidden;
+	/* background-color: #036eb7; */
 }
 
 .topnav {

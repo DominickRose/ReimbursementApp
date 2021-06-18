@@ -1,0 +1,17 @@
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 7.5%;
+}
+
+.login-form {
+	margin: auto;
+	text-align: center;
+	width: 25%;
+	padding: 10px;
+	color: white;
+	background-color: rgba(60,57,55,0.75);
+	border-radius: 15pt;
+}
+

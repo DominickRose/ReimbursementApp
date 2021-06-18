@@ -1,0 +1,27 @@
+.reimbursement-table {
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10%;
+	background-color: #3c3937;
+	color: white;
+	padding-top: 5pt;
+}
+
+thead {
+	color: white;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #036eb7;
+   color: white;
+ 
+}
+
+.table-striped>tbody>tr:nth-child(even)>td, 
+.table-striped>tbody>tr:nth-child(even)>th {
+   background-color: #2ca6e0; 
+   color: white;
+ 
+}

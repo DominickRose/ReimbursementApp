@@ -11,7 +11,9 @@ body.login {
 }
 
 body.dashboard {
-	background: url("../static/dash_background.jpg") no-repeat center center fixed;
+	background-color: black;
+	background: url("../static/logo.png") no-repeat center center fixed;
+	/* background: url("../static/dash_background.jpg") no-repeat center center fixed;  */
 	background-size: cover;
 	height: 100%;
 }
@@ -23,40 +25,12 @@ body.why {
 	overflow: hidden;
 }
 
-.reimbursement-table {
-	width: 75%;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 10%;
-	background-color: white;
-	padding-top: 5pt;
-}
-
-/* .login-form {
-	position: fixed;
-	padding: 15% 0 0 0;
-	background-color: white;
-} */
-img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 2.5%;
-}
-
-.login-form {
-	margin: auto;
-	text-align: center;
-	width: 25%;
-	padding: 10px;
-	color: white;
-	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 15pt;
-}
-
 .topnav {
-	background-color: #333;
+	background-color: #3c3937;
 	overflow: hidden;
+	position: fixed;
+	top: 0;
+	width: 100%;
 }
 
 .topnav a {
@@ -85,6 +59,6 @@ img {
 
 /* Add a color to the active/current link */
 .topnav a.active {
-  background-color: #040faa;
+  background-color: #036eb7;
   color: white;
 }

@@ -14,12 +14,14 @@
 	grid-area: stat;
 	text-align: center;
 	font-size: 30pt;
-	background-color: white;
+	background-color: #3c3937;
+	color: white;
  }
       
 .welcome { 
 	grid-area: welcome; 
 	font-size: 30pt;
-	background-color: white;
+	background-color: #3c3937;
+	color: white;
 	text-align: center;
 }
